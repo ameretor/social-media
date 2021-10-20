@@ -1,0 +1,27 @@
+#create-new-post,
+#posts {
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  background-color: #8097ff;
+}
+
+#head-navigation {
+  background-color: #2dffe7;
+  /* background-color: red; */
+}
+
+#create-new-post {
+  border-radius: 25px;
+}
+
+#posts-design {
+  height: 12rem;
+  width: 100%;
+  margin: 3rem;
+  border-radius: 5rem;
+  background-color: #5d4257;
+  background-image: linear-gradient(315deg, #5d4257 0%, #a5c7b7 74%);
+}
