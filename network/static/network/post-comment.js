@@ -10,7 +10,7 @@ function posting(action) {
     .then((results) => {
       console.log("good");
       console.log(results);
-      results.forEach((result) => display_posts(result.content));
+      results.forEach((result) => display_posts_contents(result.content));
       results.forEach((result) => {
         console.log(
           "🚀 ~ file: post-comment.js ~ line 14 ~ .then ~ result",
@@ -20,9 +20,14 @@ function posting(action) {
     });
 }
 
-function display_posts(post) {
+function display_posts_contents(content) {
   const control_post = document.createElement("div");
   control_post.id = "posts-design";
-  control_post.innerHTML = `${post}`;
+
+  const post_content = document.createElement("div");
+  post_content.id = "post-content";
+
+  post_content.innerHTML = `${content}`;
+  control_post.appendChild(post_content);
   document.querySelector("#posts").appendChild(control_post);
 }

@@ -19,3 +19,17 @@ class CreateNewPost(forms.ModelForm):
     class Meta:
         model = Posts
         fields = ["post_content"]
+
+
+class CreateComment(forms.ModelForm):
+    comment_content = forms.CharField(
+        label="",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "id": "create-comment",
+                "rows": "3",
+                "placeholder": "Make a comment on this post",
+            }
+        ),
+    )

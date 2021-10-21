@@ -95,16 +95,12 @@ def post_comment_view(request, action):
             posts.save()
             all_posts = Posts.objects.all()
             data = serialize("json", all_posts)
-        # return HttpResponse(data, content_type="json")
-        # return HttpResponseRedirect(reverse("index"))
         return JsonResponse({"message": "Posted successfully."}, safe=False)
-        # return render(
-        #     request, "network/index.html", {"create_post_form": form, "data": data}
-        # )
 
 
 @login_required(login_url="/login")
 def load_posts(request, action):
 
     all_posts = Posts.objects.all()
+    users = UserProfile.objects.all()
     return JsonResponse([post.serialize() for post in all_posts], safe=False)

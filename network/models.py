@@ -48,7 +48,6 @@ class Posts(models.Model):
 
     user = models.ForeignKey(User, on_delete=CASCADE, related_name="user_posts")
     content = models.TextField(blank=True)
-    reply = models.TextField(blank=True, null=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
