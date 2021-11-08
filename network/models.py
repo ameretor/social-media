@@ -53,7 +53,6 @@ class Posts(models.Model):
     def serialize(self):
         return {
             "content": self.content,
-            "reply": self.reply,
             "time_stamp": self.time_stamp,
         }
 

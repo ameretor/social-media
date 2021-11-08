@@ -9,7 +9,7 @@ class CreateNewPost(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "id": "create-new-post",
-                "autofocus": True,
+                # "autofocus": True,
                 "rows": "4",
                 "placeholder": "Let the world know what you think you're doing",
             }
@@ -22,14 +22,18 @@ class CreateNewPost(forms.ModelForm):
 
 
 class CreateComment(forms.ModelForm):
-    comment_content = forms.CharField(
+    content = forms.CharField(
         label="",
         widget=forms.Textarea(
             attrs={
                 "class": "form-control",
-                "id": "create-comment",
-                "rows": "3",
-                "placeholder": "Make a comment on this post",
+                "id": "add-comment",
+                "rows": "4",
+                "placeholder": "Say something on this post",
             }
         ),
     )
+
+    class Meta:
+        model = Comment
+        fields = ["content"]

@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="commented">
+    <!-- Display comments from comment Models regarding posts id -->
+
+    <!-- Display comments content from Comment models of specific posts id -->
+    {% for comment in comments %}
+    <div class="comment">
+        <div class="comment-header">
+            <div class="comment-author">
+                <img src="{% static 'network/img/user.png' %}" alt="user">
+                <span>{{ comment.user }}</span>
+            </div>
+            <div class="comment-date">
+                <span>{{ comment.date_of_comment }}</span>
+            </div>
+        </div>
+        <div class="comment-content">
+            <p>{{ comment.comment_content }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="comment-section w-100 p-3" id=>
+    <form action="{% url 'post-comment' action='comments' %}" method='post'>
+        {% csrf_token %}
+        {{ add_comment_form.as_p }}
+        <input type="submit" value="Comment" class="btn btn-primary" />
+        <input type="hidden" name="post-id" value={{ post.id }}>
+    </form>
+</div>

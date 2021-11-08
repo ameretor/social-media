@@ -17,24 +17,63 @@ body {
   border-radius: 25px;
 }
 
+.comment-link:hover {
+  text-decoration: underline;
+}
+
+/* set class comment-link position bottom right of parent dive and underline when hover */
+.comment-link {
+  position: absolute;
+  bottom: 20px;
+  right: 35px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  /* position: relative; */
+}
+
 #posts-design {
-  height: 13rem;
-  width: 100%;
+  min-height: 14rem;
+  width: 60%;
   margin: 3rem;
   border-radius: 5rem;
   background-color: #b3cdd1;
-  background-image: linear-gradient(315deg, #b3cdd1 0%, #9fa4c4 74%);
+  background-image: linear-gradient(173deg, #b3cdd1 0%, #9fa4c4 74%);
+  justify-content: center;
   position: relative;
+  margin-bottom: 10rem;
 }
 
 #post-content {
-  /* background-color: red; */
+  /* background-color: red;
   height: 60%;
   width: 75%;
   position: absolute;
   top: 50%;
   right: 0;
   left: 0;
-  margin: auto;
-  transform: translateY(-50%);
+  margin: 30px auto;
+  padding: 5px;
+  transform: translateY(-50%); */
+  margin: 30px auto;
+  max-width: 75%;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 12px -2px rgba(173, 173, 173, 0.8);
+}
+
+#comment {
+  /* background-color: blue; */
+  border-radius: 5rem;
+  position: absolute;
+  margin-top: 0px auto;
+}
+
+#add-comment {
+  width: 100%;
+  border-radius: 25px;
+  background-color: #9fbfc4;
 }
