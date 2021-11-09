@@ -72,6 +72,14 @@ class Comment(models.Model):
         auto_now_add=True, null=True, blank=True, verbose_name="commented on"
     )
 
+    def serialize(self):
+        return {
+            "user": self.user.username,
+            "post": self.post.content,
+            "comment_content": self.comment_content,
+            "date_of_comment": self.date_of_comment,
+        }
+
     def __str__(self):
         return f"user {self.user} commented (comment id: {self.id}) {self.comment_content} on {self.post.content} on {self.date_of_comment}"
 

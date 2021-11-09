@@ -132,8 +132,8 @@ def post_comment_view(request, action):
         return HttpResponseRedirect(reverse("index"))
 
 
-def load_posts(request, action):
+def load_comments(request, post_id):
 
-    all_posts = Posts.objects.all().order_by("-time_stamp")
+    all_comments = Comment.objects.all().order_by("-date_of_comment")
     users = UserProfile.objects.all()
-    return JsonResponse([post.serialize() for post in all_posts], safe=False)
+    return JsonResponse([comment.serialize() for comment in all_comments], safe=False)

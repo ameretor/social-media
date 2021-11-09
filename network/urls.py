@@ -10,7 +10,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("post-comment/<str:action>", views.post_comment_view, name="post-comment"),
-    path("load_posts/<str:action>", views.load_posts, name="load_posts"),
+    path("load_comments/<int:post_id>", views.load_comments, name="load_comments"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

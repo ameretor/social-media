@@ -1,10 +1,10 @@
 {% load static %}
 
-<div class="commented">
-    <!-- Display comments from comment Models regarding posts id -->
+<div class="commented-{{ post.id }}">
 
     <!-- Display comments content from Comment models of specific posts id -->
     {% for comment in comments %}
+    {% if comment.post.id == post.id %}
     <div class="comment">
         <div class="comment-header">
             <div class="comment-author">
@@ -19,9 +19,10 @@
             <p>{{ comment.comment_content }}</p>
         </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
-<div class="comment-section w-100 p-3" id=>
+<div class="comment-section-{{ post.id }} w-100 p-3" id=>
     <form action="{% url 'post-comment' action='comments' %}" method='post'>
         {% csrf_token %}
         {{ add_comment_form.as_p }}
