@@ -26,6 +26,7 @@ body {
   position: absolute;
   bottom: 20px;
   right: 35px;
+  cursor: pointer;
 }
 
 .container {
@@ -48,16 +49,6 @@ body {
 }
 
 #post-content {
-  /* background-color: red;
-  height: 60%;
-  width: 75%;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-  margin: 30px auto;
-  padding: 5px;
-  transform: translateY(-50%); */
   margin: 30px auto;
   max-width: 75%;
   padding: 5px;
@@ -66,14 +57,84 @@ body {
 }
 
 #comment {
-  /* background-color: blue; */
   border-radius: 5rem;
   position: absolute;
-  margin-top: 0px auto;
 }
 
 #add-comment {
   width: 100%;
   border-radius: 25px;
   background-color: #9fbfc4;
+}
+
+.comment {
+  margin-bottom: 1.5rem;
+}
+
+/* rounded profile-image */
+.profile-image {
+  width: 50px;
+  height: 50px;
+}
+
+/* comment-content style */
+.comment-content {
+  display: flex;
+  border-radius: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  background-color: #54e3a8;
+  padding: 1.5rem;
+}
+
+.user-profile {
+  padding-bottom: 25px;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-picture {
+  /* align center relative to parent element */
+  margin-left: 50%;
+  margin-right: 50%;
+  margin-top: 70px;
+  display: block;
+}
+
+.body-profile-panel {
+  position: relative;
+  margin: 0px auto 35px auto;
+  border-radius: 10px 10px 10px 10px;
+  background: rgb(109, 183, 132);
+  background: linear-gradient(
+    90deg,
+    rgba(109, 183, 132, 1) 0%,
+    rgba(153, 224, 247, 1) 26%,
+    rgba(153, 179, 247, 1) 57%,
+    rgba(216, 153, 247, 1) 82%,
+    rgba(247, 153, 175, 1) 100%
+  );
+  background-size: 200%;
+  max-width: 1000px;
+  min-height: 300px;
+  animation: bg-animation 12s both cubic-bezier(0.3, 0.11, 1, 0.89) infinite
+    alternate;
+  text-align: center;
+}
+
+.follow-buttons {
+  /* move buttons to a new line */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem;
+}
+
+.panel-heading {
+  margin: 1.5rem;
 }

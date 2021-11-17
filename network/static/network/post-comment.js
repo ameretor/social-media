@@ -1,23 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#posts").style.display = "flex";
-  // Hide all comment-section elelements
-  document.querySelectorAll(".comment-section").forEach((element) => {
+  // Hide all all-about-comments elements
+  document.querySelectorAll(".all-about-comments").forEach((element) => {
     element.style.display = "block";
   });
-  // Hide all commented elements
-  document.querySelectorAll(".commented").forEach((element) => {
-    element.style.display = "block";
-  });
+
+  showComments();
 });
 
-// Show comments section onclick
-function showComments(postId) {
-  document.querySelector(".comment-section-" + postId).style.display = "block";
-  document.querySelector(".commented-" + postId).style.display = "block";
-}
-
-// Hide comments section onclick
-function hideComments(postId) {
-  document.querySelector(".comment-section-" + postId).style.display = "none";
-  document.querySelector(".commented-" + postId).style.display = "none";
+// Show comments section on click comment-link element
+function showComments() {
+  document.querySelectorAll(".comment-link").forEach((element) => {
+    // Listen for click event on comment-link element
+    element.addEventListener("click", (event) => {
+      // Get all-about-comments element by data-postid attribute
+      const allAboutComments = document.querySelector(
+        `.all-about-comments[data-postid="${event.target.dataset.postid}"]`
+      );
+      if (allAboutComments.style.display === "block") {
+        allAboutComments.style.display = "none";
+      } else {
+        allAboutComments.style.display = "block";
+      }
+    });
+  });
 }

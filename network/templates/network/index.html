@@ -17,7 +17,7 @@
     {% for post in all_posts %}
     <div id="posts-design" class="posts-design">
         {% include "network/posts.html" %}
-        <div class="comment-link">Comments</div>
+        <div class="comment-link" data-postID={{ post.id }}>Comments</div>
     </div>
     {% endfor %}
 </div>

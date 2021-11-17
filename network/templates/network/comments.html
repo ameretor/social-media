@@ -1,32 +1,38 @@
 {% load static %}
 
-<div class="commented-{{ post.id }}">
+<div class="all-about-comments" data-postId="{{ post.id }}">
+    <div class="commented w-100 p-3">
 
-    <!-- Display comments content from Comment models of specific posts id -->
-    {% for comment in comments %}
-    {% if comment.post.id == post.id %}
-    <div class="comment">
-        <div class="comment-header">
-            <div class="comment-author">
-                <img src="{% static 'network/img/user.png' %}" alt="user">
-                <span>{{ comment.user }}</span>
+        <!-- Display comments content from Comment models of specific posts id -->
+        {% for comment in comments %}
+        {% if comment.post.id == post.id %}
+        <div class="comment" id="commented-{{ comment.post.id}}">
+            <div class="comment-header">
+                <div class="comment-author">
+                    <img class="rounded-circle profile-image" src="{% static 'network/img/user.png' %}" alt="user">
+                    <span>{{ comment.user }}</span>
+                </div>
+                <div class="comment-date">
+                    <span>{{ comment.date_of_comment }}</span>
+                </div>
             </div>
-            <div class="comment-date">
-                <span>{{ comment.date_of_comment }}</span>
+            <div class="comment-content">
+                <p>{{ comment.comment_content }}</p>
             </div>
         </div>
-        <div class="comment-content">
-            <p>{{ comment.comment_content }}</p>
-        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="comment-section w-100 p-3" data-postID="{{ comment.post.id }}"
+        id="comment-section-{{ comment.post.id}}">
+        <form action="{% url 'post-comment' action='comments' %}" method='post'>
+            {% csrf_token %}
+            {{ add_comment_form.as_p }}
+            <input type="submit" value="Comment" class="btn btn-primary" />
+            <input type="hidden" name="post-id" value={{ post.id }}>
+        </form>
     </div>
     {% endif %}
-    {% endfor %}
-</div>
-<div class="comment-section-{{ post.id }} w-100 p-3" id=>
-    <form action="{% url 'post-comment' action='comments' %}" method='post'>
-        {% csrf_token %}
-        {{ add_comment_form.as_p }}
-        <input type="submit" value="Comment" class="btn btn-primary" />
-        <input type="hidden" name="post-id" value={{ post.id }}>
-    </form>
 </div>

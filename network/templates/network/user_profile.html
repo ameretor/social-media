@@ -1,0 +1,50 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+<!-- Create user profile page -->
+{% block body %}
+<div class="container user-profile">
+    <div class="row profile-container">
+        <div class="profile-picture">
+            <img src="{% static 'network/img/user.png' %}" class="rounded-circle" alt="user">
+        </div>
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                {{ current_user.name }}
+            </h2>
+        </div>
+        <div class="col-md-12 body-profile-panel">
+            {% if current_user.id == user.id %}
+            <div class="follow-buttons">
+                <a class="btn btn-primary">Edit Profile</a>
+            </div>
+            {% else %}
+            <div class="follow-buttons">
+                <button class="btn btn-success">Follow</button>
+            </div>
+            {% endif %}
+            <div class=" panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>
+                                <span class="glyphicon glyphicon-current_user"></span>
+                                Name: {{ current_user.user.first_name }} {{ current_user.user.last_name }}
+                            </h4>
+                            <h4>
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                DOB: {{ current_user.date_of_birth }}
+                            </h4>
+                            <h4>
+                                <!-- User bio -->
+                                <span class="glyphicon glyphicon-comment"></span>
+                                About: {{ current_user.about }}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,16 @@
-<div data-postID={{ post.id }}>
-    <div id="post-content">
-        <p>{{ post.content }}</p>
+{% load static %}
+<div>
+    <div class="w-75 p-3">
+        <div class="post-author">
+            <img class="rounded-circle profile-image" src="{% static 'network/img/user.png' %}" alt="user">
+            <span>{{ post.user }}</span>
+        </div>
+        <div class="post-timing">
+            <span>{{ post.time_stamp }}</span>
+        </div>
+        <div id="post-content">
+            <p>{{ post.content }}</p>
+        </div>
     </div>
     {% include 'network/comments.html' %}
 </div>

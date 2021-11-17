@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 
 from . import views
 
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
@@ -11,6 +12,8 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("post-comment/<str:action>", views.post_comment_view, name="post-comment"),
     path("load_comments/<int:post_id>", views.load_comments, name="load_comments"),
+    path("user_profile/<int:user_id>", views.user_profile, name="user_profile"),
+    path("edit_profile/<int:user_id>", views.edit_profile, name="edit_profile"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Posts, Comment, Following, UserProfile
 
 # Adding forms
-from .forms import CreateNewPost, CreateComment
+from .forms import CreateNewPost, CreateComment, EditProfileForm
 
 
 def index(request):
@@ -137,3 +137,28 @@ def load_comments(request, post_id):
     all_comments = Comment.objects.all().order_by("-date_of_comment")
     users = UserProfile.objects.all()
     return JsonResponse([comment.serialize() for comment in all_comments], safe=False)
+
+
+@login_required(login_url="/login")
+def user_profile(request, user_id):
+    # Get User Profile
+    user_profile = UserProfile.objects.get(user=user_id)
+    print(user_profile)
+    return render(request, "network/user_profile.html", {"current_user": user_profile})
+
+
+@login_required(login_url="/login")
+def edit_profile(request, user_id):
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user_profile = UserProfile.objects.get(user=user_id)
+            user_profile.name = form.cleaned_data["name"]
+            user_profile.date_of_birth = form.cleaned_data["date_of_birth"]
+            user_profile.about = form.cleaned_data["about"]
+            user_profile.profile_picture = form.cleaned_data["profile_picture"]
+            user_profile.save()
+            return render(request, "network/index.html")
+    else:
+        form = EditProfileForm(instance=request.user)
+        return render(request, "network/edit_profile.html", {"form": form})
