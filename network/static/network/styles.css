@@ -6,6 +6,7 @@
 
 body {
   background-color: #8097ff;
+  align-items: center;
 }
 
 #head-navigation {
@@ -94,8 +95,16 @@ body {
 
 .profile-container {
   display: flex;
+  border-radius: 15px;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    #8097ff,
+    #c1f7f7
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  box-shadow: 0px 0px 12px -2px rgba(173, 173, 173, 0.8);
 }
 
 .profile-picture {
@@ -122,8 +131,6 @@ body {
   background-size: 200%;
   max-width: 1000px;
   min-height: 300px;
-  animation: bg-animation 12s both cubic-bezier(0.3, 0.11, 1, 0.89) infinite
-    alternate;
   text-align: center;
 }
 
@@ -138,3 +145,32 @@ body {
 .panel-heading {
   margin: 1.5rem;
 }
+
+/* custom edit-profile-form */
+.edit-profile {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  padding: 30px;
+}
+
+h3 {
+  position: relative;
+  top: -30px;
+}
+
+.edit-profile-form {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 30px;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #95a6a8;
+  background-image: linear-gradient(173deg, #b3cdd1 0%, #9fa4c4 74%);
+  box-shadow: 0px 0px 12px -2px rgba(173, 173, 173, 0.8);
+}
+
+/* submit buttons styles */

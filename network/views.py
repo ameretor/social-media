@@ -1,4 +1,5 @@
 from django.core import serializers
+from django.core.paginator import Paginator
 from django.core.serializers import serialize
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -113,6 +114,7 @@ def post_comment_view(request, action):
             form = CreateComment(request.POST)
 
             if form.is_valid():
+                print("Comment form is valid")
                 comment_content = form.cleaned_data["content"]
 
                 try:
@@ -143,22 +145,32 @@ def load_comments(request, post_id):
 def user_profile(request, user_id):
     # Get User Profile
     user_profile = UserProfile.objects.get(user=user_id)
-    print(user_profile)
-    return render(request, "network/user_profile.html", {"current_user": user_profile})
+    all_posts_by_user = Posts.objects.filter(user=user_id)
+    paginator = Paginator(all_posts_by_user, 2)
+    page_number = request.GET.get("page")
+    pag_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "network/user_profile.html",
+        {
+            "current_user": user_profile,
+            "pag_obj": pag_obj,
+            "add_comment_form": CreateComment,
+        },
+    )
 
 
 @login_required(login_url="/login")
-def edit_profile(request, user_id):
+def edit_profile(request):
     if request.method == "POST":
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        form = EditProfileForm(request.POST)
         if form.is_valid():
-            user_profile = UserProfile.objects.get(user=user_id)
-            user_profile.name = form.cleaned_data["name"]
-            user_profile.date_of_birth = form.cleaned_data["date_of_birth"]
-            user_profile.about = form.cleaned_data["about"]
-            user_profile.profile_picture = form.cleaned_data["profile_picture"]
-            user_profile.save()
-            return render(request, "network/index.html")
-    else:
-        form = EditProfileForm(instance=request.user)
-        return render(request, "network/edit_profile.html", {"form": form})
+            print("Form is valid")
+            # user_profile = UserProfile.objects.get(user=request.user.id)
+            # user_profile.profile_picture = form.cleaned_data["profile_picture"]
+            # user_profile.save()
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            print(form.errors)
+    print("Request Get")
+    return render(request, "network/edit_profile.html", {"form": EditProfileForm()})

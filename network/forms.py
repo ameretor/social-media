@@ -40,23 +40,42 @@ class CreateComment(forms.ModelForm):
         fields = ["content"]
 
 
-class EditProfileForm(forms.ModelForm):
-    """
-    Form to create new profile
-    * name
-    * date_of_birth
-    * about
-    * profile_picture
-    """
+class DateInput(forms.DateInput):
+    input_type = "date"
 
-    date_of_birth = forms.DateField(
-        required=False,
-        widget=forms.DateInput(
+
+class EditProfileForm(forms.ModelForm):
+    # Containing fields name, date_of_birth, about, profile_picture
+    name = forms.CharField(
+        label="Name:",
+        widget=forms.TextInput(
             attrs={
                 "class": "form-control",
-                "id": "date-of-birth",
-                "type": "date",
-                "placeholder": "Date of birth",
+                "id": "name",
+                "placeholder": "Name",
+            }
+        ),
+    )
+
+    about = forms.CharField(
+        label="Bio:",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "id": "about",
+                "rows": "4",
+                "placeholder": "About",
+            }
+        ),
+    )
+
+    profile_picture = forms.ImageField(
+        label="Profile Pic:",
+        widget=forms.FileInput(
+            attrs={
+                "class": "form-control",
+                "id": "profile_picture",
+                "placeholder": "Profile Picture",
             }
         ),
     )
@@ -64,43 +83,4 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ["name", "date_of_birth", "about", "profile_picture"]
-        labels = {
-            "name": "Name",
-            "date_of_birth": "Date of birth",
-            "about": "About",
-            "profile_picture": "Profile picture",
-        }
-        widgets = {
-            "name": widgets.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "id": "name",
-                    "type": "text",
-                    "placeholder": "Name",
-                }
-            ),
-            "about": widgets.Textarea(
-                attrs={
-                    "class": "form-control",
-                    "id": "about",
-                    "rows": "4",
-                    "placeholder": "About",
-                }
-            ),
-            "date_of_birth": widgets.DateInput(
-                attrs={
-                    "class": "form-control",
-                    "id": "date-of-birth",
-                    "type": "date",
-                    "placeholder": "Date of birth",
-                }
-            ),
-            "profile_picture": widgets.FileInput(
-                attrs={
-                    "class": "form-control",
-                    "id": "profile-picture",
-                    "type": "file",
-                    "placeholder": "Profile picture",
-                }
-            ),
-        }
+        widgets = {"date_of_birth": DateInput()}
