@@ -20,7 +20,14 @@
         <div class="comment-link" data-postID={{ post.id }}>Comments</div>
     </div>
     {% endfor %}
+
+    <div class="testing">
+        {% for post in pag_obj.object_list %}
+        {% include "network/posts.html" %}
+        {% endfor %}
+    </div>
 </div>
+{% include "network/paginator.html" %}
 {% endblock %}
 {% block script %}
 <script src="{% static 'network/post-comment.js' %}"></script>

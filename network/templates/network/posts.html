@@ -3,7 +3,7 @@
     <div class="w-75 p-3">
         <div class="post-author">
             <img class="rounded-circle profile-image" src="{% static 'network/img/user.png' %}" alt="user">
-            <span>{{ post.user }}</span>
+            <a href="{% url 'user_profile' user_id=post.user.id %}"><span>{{ post.user }}</span></a>
         </div>
         <div class="post-timing">
             <span>{{ post.time_stamp }}</span>

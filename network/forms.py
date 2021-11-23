@@ -70,6 +70,7 @@ class EditProfileForm(forms.ModelForm):
     )
 
     profile_picture = forms.ImageField(
+        required=False,
         label="Profile Pic:",
         widget=forms.FileInput(
             attrs={

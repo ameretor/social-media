@@ -19,6 +19,12 @@ def index(request):
     all_posts = Posts.objects.all().order_by("-time_stamp")
     data = serialize("json", all_posts)
     comments = Comment.objects.all()
+    paginator = Paginator(all_posts, 2)
+    page_number = request.GET.get("page")
+    pag_obj = paginator.get_page(page_number)
+    print(page_number)
+    print(pag_obj)
+    print(pag_obj.next_page_number())
 
     return render(
         request,
@@ -29,6 +35,7 @@ def index(request):
             "add_comment_form": CreateComment,
             "all_posts": all_posts,
             "comments": comments,
+            "pag_obj": pag_obj,
         },
     )
 
@@ -145,7 +152,7 @@ def load_comments(request, post_id):
 def user_profile(request, user_id):
     # Get User Profile
     user_profile = UserProfile.objects.get(user=user_id)
-    all_posts_by_user = Posts.objects.filter(user=user_id)
+    all_posts_by_user = Posts.objects.filter(user=user_id).order_by("-time_stamp")
     paginator = Paginator(all_posts_by_user, 2)
     page_number = request.GET.get("page")
     pag_obj = paginator.get_page(page_number)
@@ -166,9 +173,15 @@ def edit_profile(request):
         form = EditProfileForm(request.POST)
         if form.is_valid():
             print("Form is valid")
-            # user_profile = UserProfile.objects.get(user=request.user.id)
-            # user_profile.profile_picture = form.cleaned_data["profile_picture"]
-            # user_profile.save()
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            user_profile.about = form.cleaned_data["about"]
+            user_profile.name = form.cleaned_data["name"]
+            fname = User.objects.get(pk=request.user.id)
+            fname.first_name = user_profile.name
+            fname.save()
+            user_profile.date_of_birth = form.cleaned_data["date_of_birth"]
+            user_profile.profile_picture = form.cleaned_data["profile_picture"]
+            user_profile.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             print(form.errors)

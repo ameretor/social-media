@@ -9,14 +9,14 @@
             <img src="{% static 'network/img/user.png' %}" class="rounded-circle" alt="user">
         </div>
         <div class="panel-heading">
-            <h2 class="panel-title">
+            <h3 class="panel-title">
                 {{ current_user.name }}
-            </h2>
+            </h3>
         </div>
         <div class="col-md-12 body-profile-panel">
-            {% if current_user.id == user.id %}
+            {% if current_user.user.id == user.id %}
             <div class="follow-buttons">
-                <a class="btn btn-primary">Edit Profile</a>
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
             </div>
             {% else %}
             <div class="follow-buttons">
@@ -29,7 +29,7 @@
                         <div class="col-md-12">
                             <h4>
                                 <span class="glyphicon glyphicon-current_user"></span>
-                                Name: {{ current_user.user.first_name }} {{ current_user.user.last_name }}
+                                Name: {{ current_user.name }}
                             </h4>
                             <h4>
                                 <span class="glyphicon glyphicon-calendar"></span>
