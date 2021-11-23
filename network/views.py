@@ -19,13 +19,9 @@ def index(request):
     all_posts = Posts.objects.all().order_by("-time_stamp")
     data = serialize("json", all_posts)
     comments = Comment.objects.all()
-    paginator = Paginator(all_posts, 2)
+    paginator = Paginator(all_posts, 5)
     page_number = request.GET.get("page")
     pag_obj = paginator.get_page(page_number)
-    print(page_number)
-    print(pag_obj)
-    print(pag_obj.next_page_number())
-
     return render(
         request,
         "network/index.html",
@@ -36,6 +32,7 @@ def index(request):
             "all_posts": all_posts,
             "comments": comments,
             "pag_obj": pag_obj,
+            "paginator": paginator,
         },
     )
 

@@ -14,18 +14,12 @@
 {% endif %}
 
 <div class="container w-75 p-3" id="posts">
-    {% for post in all_posts %}
+    {% for post in pag_obj.object_list %}
     <div id="posts-design" class="posts-design">
         {% include "network/posts.html" %}
         <div class="comment-link" data-postID={{ post.id }}>Comments</div>
     </div>
     {% endfor %}
-
-    <div class="testing">
-        {% for post in pag_obj.object_list %}
-        {% include "network/posts.html" %}
-        {% endfor %}
-    </div>
 </div>
 {% include "network/paginator.html" %}
 {% endblock %}

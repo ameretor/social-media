@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#posts").style.display = "flex";
   // Hide all all-about-comments elements
   document.querySelectorAll(".all-about-comments").forEach((element) => {
-    element.style.display = "block";
+    element.style.display = "none";
   });
 
   showComments();
@@ -19,8 +19,14 @@ function showComments() {
       );
       if (allAboutComments.style.display === "block") {
         allAboutComments.style.display = "none";
+        document.querySelector(
+          `.comment-link[data-postid="${event.target.dataset.postid}"]`
+        ).innerHTML = "Comments";
       } else {
         allAboutComments.style.display = "block";
+        document.querySelector(
+          `.comment-link[data-postid="${event.target.dataset.postid}"]`
+        ).innerHTML = "Hide comments";
       }
     });
   });
