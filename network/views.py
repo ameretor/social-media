@@ -159,6 +159,7 @@ def user_profile(request, user_id):
         {
             "current_user": user_profile,
             "pag_obj": pag_obj,
+            "all_posts_by_user": all_posts_by_user,
             "add_comment_form": CreateComment,
         },
     )
