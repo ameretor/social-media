@@ -10,7 +10,7 @@
             <div class="comment-header">
                 <div class="comment-author">
                     <img class="rounded-circle profile-image" src="{% static 'network/img/user.png' %}" alt="user">
-                    <span>{{ comment.user }}</span>
+                    <a href="{% url 'user_profile' user_id=comment.user.id %}"><span>{{ comment.user }}</span></a>
                 </div>
                 <div class="comment-date">
                     <span>{{ comment.date_of_comment }}</span>

@@ -95,3 +95,15 @@ class Following(models.Model):
 
     def __str__(self):
         return f"{self.user_follower} is following {self.user} on post {self.post.id}"
+
+
+class Likes(models.Model):
+    """
+    * Collection of posts liked by users
+    """
+
+    user = models.ForeignKey(User, on_delete=CASCADE, related_name="likes_user")
+    post = models.ForeignKey(Posts, on_delete=CASCADE, related_name="likes_post")
+
+    def __str__(self):
+        return f"{self.user} liked post {self.post.id}"

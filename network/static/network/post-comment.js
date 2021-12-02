@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   showComments();
+  showLikes();
 });
 
 // Show comments section on click comment-link element
@@ -29,5 +30,15 @@ function showComments() {
         ).innerHTML = "Hide comments";
       }
     });
+  });
+}
+
+function showLikes() {
+  // Hide all thumbs-up-filled elements
+  document.querySelectorAll(".thumbs-up-button").forEach((element) => {
+    element.style.display = "block";
+  });
+  document.querySelectorAll(".thumbs-up-filled").forEach((element) => {
+    element.style.display = "none";
   });
 }
