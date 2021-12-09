@@ -32,13 +32,3 @@ function showComments() {
     });
   });
 }
-
-function showLikes() {
-  // Hide all thumbs-up-filled elements
-  document.querySelectorAll(".thumbs-up-button").forEach((element) => {
-    element.style.display = "block";
-  });
-  document.querySelectorAll(".thumbs-up-filled").forEach((element) => {
-    element.style.display = "none";
-  });
-}

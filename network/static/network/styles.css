@@ -92,6 +92,7 @@ body {
 
 .user-profile {
   padding-bottom: 25px;
+  display: flex;
 }
 
 .profile-container {
@@ -113,7 +114,6 @@ body {
   margin-left: 50%;
   margin-right: 50%;
   margin-top: 70px;
-  display: block;
 }
 
 .body-profile-panel {

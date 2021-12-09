@@ -4,9 +4,9 @@
 <!-- Create user profile page -->
 {% block body %}
 <div class="container user-profile">
-    <div class="row profile-container">
+    <div class="row w-75 p-3 profile-container">
         <div class="profile-picture">
-            <img src="{% static 'network/img/user.png' %}" class="rounded-circle" alt="user">
+            <img src="{{ current_user.image.url }}" class="rounded-circle" alt="user">
         </div>
         <div class="panel-heading">
             <h3 class="panel-title">

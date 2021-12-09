@@ -14,6 +14,8 @@ urlpatterns = [
     path("load_comments/<int:post_id>", views.load_comments, name="load_comments"),
     path("user_profile/<int:user_id>", views.user_profile, name="user_profile"),
     path("edit_profile/", views.edit_profile, name="edit_profile"),
+    path("likes_view/", views.likes_view, name="likes_view"),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

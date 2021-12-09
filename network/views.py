@@ -5,11 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Posts, Comment, Following, UserProfile
+from .models import User, Posts, Comment, Following, UserProfile, Likes
 
 # Adding forms
 from .forms import CreateNewPost, CreateComment, EditProfileForm
@@ -168,7 +168,7 @@ def user_profile(request, user_id):
 @login_required(login_url="/login")
 def edit_profile(request):
     if request.method == "POST":
-        form = EditProfileForm(request.POST)
+        form = EditProfileForm(request.POST, request.FILES)
         if form.is_valid():
             print("Form is valid")
             user_profile = UserProfile.objects.get(user=request.user.id)
@@ -178,10 +178,73 @@ def edit_profile(request):
             fname.first_name = user_profile.name
             fname.save()
             user_profile.date_of_birth = form.cleaned_data["date_of_birth"]
-            user_profile.profile_picture = form.cleaned_data["profile_picture"]
+            user_profile.image = form.cleaned_data["profile_picture"]
             user_profile.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             print(form.errors)
     print("Request Get")
     return render(request, "network/edit_profile.html", {"form": EditProfileForm()})
+
+
+@login_required(login_url="/login")
+def likes_view(request):
+    # if request.method == "GET":
+    #     return JsonResponse({"errors": "POST request required."})
+
+    # if request.method == "POST":
+    #     if request.POST["action"] == "like":
+    #         print(action)
+    #         try:
+    #             this_post = Posts.objects.get(pk=request.POST["post-id"])
+    #             print(this_post)
+    #         except Posts.DoesNotExist:
+    #             return JsonResponse({"errors": "Post does not exist."})
+
+    #         try:
+    #             this_user = User.objects.get(pk=request.user.id)
+    #             print(this_user)
+    #         except User.DoesNotExist:
+    #             return JsonResponse({"errors": "User does not exist."})
+
+    #         like = Likes(user=this_user, post=this_post, liked=True)
+    #         like.save()
+    #         return JsonResponse({"message": "Liked successfully."}, safe=False)
+
+    #     if request.POST["action"] == "unlike":
+    #         print("Unlike action")
+    #         try:
+    #             this_post = Posts.objects.get(pk=request.POST["post-id"])
+    #             print(this_post)
+    #         except Posts.DoesNotExist:
+    #             return JsonResponse({"errors": "Post does not exist."})
+
+    #         try:
+    #             this_user = User.objects.get(pk=request.user.id)
+    #             print(this_user)
+    #         except User.DoesNotExist:
+    #             return JsonResponse({"errors": "User does not exist."})
+
+    #         like = Likes.objects.get(user=this_user, post=this_post)
+    #         like.delete()
+    #         return JsonResponse({"message": "Unliked successfully."}, safe=False)
+    user = request.user
+    if request.method == "POST":
+        post_id = request.POST["post-id"]
+        post_obj = Posts.objects.get(pk=post_id)
+
+        if user in post_obj.likes.all():
+            post_obj.likes.remove(user)
+        else:
+            post_obj.likes.add(user)
+
+        like, created = Likes.objects.get_or_create(user=user, post=post_obj)
+
+        if not created:
+            if like.liked == True:
+                like.liked = False
+            else:
+                like.liked = True
+
+        like.save()
+    return redirect("index")

@@ -14,18 +14,20 @@ class UserProfile(models.Model):
     * User Data adding additional fields.
     """
 
-    user = models.ForeignKey(User, on_delete=CASCADE, related_name="user_profile")
+    user = models.OneToOneField(User, on_delete=CASCADE, related_name="profile")
     name = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateTimeField(blank=True, null=True)
     about = models.TextField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to="images", blank=True, null=True)
+    image = models.ImageField(
+        default="images/default.png", upload_to="images/", blank=True, null=True
+    )
 
     def serialize(self):
         return {
             "name": self.name,
             "date_of_birth": self.date_of_birth,
             "about": self.about,
-            "profile_picture": self.profile_picture,
+            "image": self.image,
         }
 
     def __str__(self):
@@ -36,9 +38,9 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, *args, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-        print("User profile created")
+        print("User profile created 2")
     else:
-        print("User Profile not created")
+        print("User Profile not created 2")
 
 
 class Posts(models.Model):
@@ -49,6 +51,9 @@ class Posts(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE, related_name="user_posts")
     content = models.TextField(blank=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(
+        User, default=None, blank=True, related_name="liked_posts"
+    )
 
     def serialize(self):
         return {
@@ -104,6 +109,7 @@ class Likes(models.Model):
 
     user = models.ForeignKey(User, on_delete=CASCADE, related_name="likes_user")
     post = models.ForeignKey(Posts, on_delete=CASCADE, related_name="likes_post")
+    liked = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user} liked post {self.post.id}"
