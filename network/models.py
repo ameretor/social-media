@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from PIL import Image
 
 
 class User(AbstractUser):
@@ -18,9 +19,23 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateTimeField(blank=True, null=True)
     about = models.TextField(blank=True, null=True)
+    followers = models.ManyToManyField(
+        User, related_name="followers", default=None, blank=True
+    )
     image = models.ImageField(
         default="images/default.png", upload_to="images/", blank=True, null=True
     )
+
+    # Resize image to 300x300
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
     def serialize(self):
         return {
@@ -54,6 +69,10 @@ class Posts(models.Model):
     likes = models.ManyToManyField(
         User, default=None, blank=True, related_name="liked_posts"
     )
+
+    class Meta:
+        verbose_name = "post"
+        verbose_name_plural = "posts"
 
     def serialize(self):
         return {
@@ -95,11 +114,19 @@ class Following(models.Model):
     """
 
     user = models.ForeignKey(User, on_delete=CASCADE, related_name="following_user")
-    user_follower = models.ForeignKey(User, on_delete=CASCADE, related_name="follower")
-    post = models.ForeignKey(Posts, on_delete=CASCADE, related_name="following_post")
+    user_following = models.ForeignKey(User, on_delete=CASCADE, related_name="follower")
+    followed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user_follower} is following {self.user} on post {self.post.id}"
+        return f"Follow id {self.id} represents {self.user} is following {self.user_following}"
+
+    class Meta:
+        verbose_name = "Following"
+        verbose_name_plural = "Followings"
+        unique_together = ("user", "user_following")
+
+    def get_user_followed_posts(self):
+        return self.user_following.user_posts.order_by("-time_stamp").all()
 
 
 class Likes(models.Model):

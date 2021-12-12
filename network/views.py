@@ -153,6 +153,17 @@ def user_profile(request, user_id):
     paginator = Paginator(all_posts_by_user, 2)
     page_number = request.GET.get("page")
     pag_obj = paginator.get_page(page_number)
+    # Get user followed by current user
+    user_followed_by_current_user = User.objects.get(id=user_id)
+    print(user_followed_by_current_user)
+    comments = Comment.objects.all()
+    try:
+        is_following = Following.objects.get(
+            user=request.user, user_following=user_followed_by_current_user
+        ).followed
+        print(is_following)
+    except Following.DoesNotExist:
+        is_following = False
     return render(
         request,
         "network/user_profile.html",
@@ -161,6 +172,8 @@ def user_profile(request, user_id):
             "pag_obj": pag_obj,
             "all_posts_by_user": all_posts_by_user,
             "add_comment_form": CreateComment,
+            "is_following": is_following,
+            "comments": comments,
         },
     )
 
@@ -189,45 +202,6 @@ def edit_profile(request):
 
 @login_required(login_url="/login")
 def likes_view(request):
-    # if request.method == "GET":
-    #     return JsonResponse({"errors": "POST request required."})
-
-    # if request.method == "POST":
-    #     if request.POST["action"] == "like":
-    #         print(action)
-    #         try:
-    #             this_post = Posts.objects.get(pk=request.POST["post-id"])
-    #             print(this_post)
-    #         except Posts.DoesNotExist:
-    #             return JsonResponse({"errors": "Post does not exist."})
-
-    #         try:
-    #             this_user = User.objects.get(pk=request.user.id)
-    #             print(this_user)
-    #         except User.DoesNotExist:
-    #             return JsonResponse({"errors": "User does not exist."})
-
-    #         like = Likes(user=this_user, post=this_post, liked=True)
-    #         like.save()
-    #         return JsonResponse({"message": "Liked successfully."}, safe=False)
-
-    #     if request.POST["action"] == "unlike":
-    #         print("Unlike action")
-    #         try:
-    #             this_post = Posts.objects.get(pk=request.POST["post-id"])
-    #             print(this_post)
-    #         except Posts.DoesNotExist:
-    #             return JsonResponse({"errors": "Post does not exist."})
-
-    #         try:
-    #             this_user = User.objects.get(pk=request.user.id)
-    #             print(this_user)
-    #         except User.DoesNotExist:
-    #             return JsonResponse({"errors": "User does not exist."})
-
-    #         like = Likes.objects.get(user=this_user, post=this_post)
-    #         like.delete()
-    #         return JsonResponse({"message": "Unliked successfully."}, safe=False)
     user = request.user
     if request.method == "POST":
         post_id = request.POST["post-id"]
@@ -248,3 +222,56 @@ def likes_view(request):
 
         like.save()
     return redirect("index")
+
+
+@login_required(login_url="/login")
+def following(request):
+    user = request.user
+
+    if request.method == "POST":
+        user_id = request.POST["user-following-id"]
+        print(user_id)
+        # Get user followed by current user
+        user_followed_by_current_user = User.objects.get(id=user_id)
+        user_profile_obj = UserProfile.objects.get(user=user_id)
+        print("This is", user_followed_by_current_user)
+
+        if user in user_profile_obj.followers.all():
+            user_profile_obj.followers.remove(user)
+            Following.objects.get(
+                user=user, user_following=user_followed_by_current_user
+            ).delete()
+        else:
+            user_profile_obj.followers.add(user)
+
+        following, created = Following.objects.get_or_create(
+            user=user, user_following=user_followed_by_current_user, followed=True
+        )
+
+        if not created:
+            if following.followed == True:
+                following.followed = False
+            else:
+                following.followed = True
+
+        following.save()
+
+    # Get all Posts by followed users
+    all_posts_by_followed_users = []
+    followed_users = UserProfile.objects.get(user=user).followers.all()
+    print(followed_users)
+    for followed_user in followed_users:
+        all_posts_by_followed_users.extend(
+            Posts.objects.filter(user=followed_user.profile.user.id)
+        )
+        print(followed_user)
+    print(all_posts_by_followed_users)
+    # all the comment
+    comments = Comment.objects.all()
+    context = {
+        "all_posts_by_followed_users": all_posts_by_followed_users,
+        "add_comment_form": CreateComment,
+        "comments": comments,
+    }
+
+    return render(request, "network/following.html", context)

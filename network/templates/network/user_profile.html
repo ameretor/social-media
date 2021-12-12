@@ -19,9 +19,20 @@
                 <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
             </div>
             {% else %}
-            <div class="follow-buttons">
-                <button class="btn btn-success">Follow</button>
-            </div>
+            <form action="{% url 'following' %}" method="post">
+                {% csrf_token %}
+                {% if is_following == False %}
+                <div class="follow-buttons">
+                    <button class="btn btn-success">Follow</button>
+                    <input type="hidden" name="user-following-id" value="{{ current_user.user.id }}">
+                </div>
+                {% else %}
+                <div class="unfollow-buttons">
+                    <button class="btn btn-success">UnFollow</button>
+                    <input type="hidden" name="user-following-id" value="{{ current_user.user.id }}">
+                </div>
+                {% endif %}
+            </form>
             {% endif %}
             <div class=" panel panel-default">
                 <div class="panel-body">
@@ -51,6 +62,7 @@
     {% for post in all_posts_by_user %}
     <div id="posts-design" class="posts-design">
         {% include "network/posts.html" %}
+        {% include "network/comments.html" %}
         <div class="comment-link" data-postID={{ post.id }}>Comments</div>
     </div>
     {% endfor %}
