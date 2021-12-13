@@ -1,10 +1,55 @@
 {% load static %}
 <div class="posts">
-    <div class="w-75 p-3">
+    <div class="w-100 p-3">
         <div class="post-author">
             <img class="rounded-circle profile-image" src="{{ post.user.profile.image.url }}" alt="user">
             <a href="{% url 'user_profile' user_id=post.user.id %}"><span>{{ post.user }}</span></a>
         </div>
+
+        {% if user.id == post.user.id %}
+        <div class="delete-edit-panel">
+            <div class="dropdown">
+                <a class="btn icon-button" href="#" role="button" id="dropdownMenuLink_{{ post.id }}"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots"
+                        fill="rgb(101, 103, 107)" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                    </svg>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_{{ post.id }}">
+                    <button class="dropdown-item dropdown-edit" data-toggle="modal"
+                        data-target="#modal_edit_post_{{ post.id }}">Edit</button>
+                    <button class="dropdown-item dropdown-delete" data-toggle="modal"
+                        data-target="#modal_delete_post_{{ post.id }}">Delete</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Add modal edit post -->
+        <div class="modal modal_edit_post" id="modal_edit_post_{{ post.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modal_edit_post_{{ post.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_edit_post_{{ post.id }}_title">Edit Post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h1>Test Modal body</h1>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary modal-save">Change my thoughts</button>
+                        <button class="btn btn-primary modal-cancel" data-dismiss="modal" type="button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="post-timing">
             <span>{{ post.time_stamp|timesince }} ago</span>
         </div>
@@ -47,5 +92,6 @@
     {% include 'network/comments.html' %}
 </div>
 {% block script %}
-<script src="{% static 'network/like-functions.js' %}" type="text/javascript"></script>
+<script src="{% static 'network/edit-delete-function.js' %}"></script>
+<script src="{% static 'network/additional-function.js' %}"></script>
 {% endblock %}

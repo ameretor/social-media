@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   showComments();
-  showLikes();
 });
 
 // Show comments section on click comment-link element

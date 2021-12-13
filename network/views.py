@@ -88,7 +88,10 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "network/register.html")
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "network/register.html")
 
 
 @login_required(login_url="/login")
