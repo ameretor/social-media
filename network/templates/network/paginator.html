@@ -1,0 +1,19 @@
+<!-- Paginator  -->
+<div class="paginator">
+    <ul class="pagination justify-content-center">
+        {% if pag_obj.has_previous %}
+        <li class="page-item"><a class="page-link"
+                href="{% url 'index' %}?page={{ pag_obj.previous_page_number }}">Previous Page</a></li>
+        {% endif %}
+        {% for page in paginator.page_range %}
+        <li class="page-item {% if page == pag_obj.number %}active{% endif %}">
+            <a class="page-link" href="{% url 'index' %}?page={{page}}">{{ page }}</a>
+        </li>
+        {% endfor %}
+        {% if pag_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ pag_obj.next_page_number }}">Next
+                Page</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>

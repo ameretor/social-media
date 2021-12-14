@@ -1,0 +1,17 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{{% block body %}
+<div class="edit-profile">
+    <h3>{{ user.username }}'s Bio</h3>
+    <div class="edit-profile-form">
+        <div>
+            <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-primary follow-buttons">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}}

@@ -1,0 +1,74 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+<!-- Create user profile page -->
+{% block body %}
+<div class="container user-profile">
+    <div class="row w-75 p-3 profile-container">
+        <div class="profile-picture">
+            <img src="{{ current_user.image.url }}" class="rounded-circle" alt="user">
+        </div>
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ current_user.name }}
+            </h3>
+        </div>
+        <div class="col-md-12 body-profile-panel">
+            {% if current_user.user.id == user.id %}
+            <div class="follow-buttons">
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+            </div>
+            {% else %}
+            <form action="{% url 'following' %}" method="post">
+                {% csrf_token %}
+                {% if is_following == False %}
+                <div class="follow-buttons">
+                    <button class="btn btn-success">Follow</button>
+                    <input type="hidden" name="user-following-id" value="{{ current_user.user.id }}">
+                </div>
+                {% else %}
+                <div class="unfollow-buttons">
+                    <button class="btn btn-success">UnFollow</button>
+                    <input type="hidden" name="user-following-id" value="{{ current_user.user.id }}">
+                </div>
+                {% endif %}
+            </form>
+            {% endif %}
+            <div class=" panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>
+                                <span class="glyphicon glyphicon-current_user"></span>
+                                Name: {{ current_user.name }}
+                            </h4>
+                            <h4>
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                DOB: {{ current_user.date_of_birth }}
+                            </h4>
+                            <h4>
+                                <!-- User bio -->
+                                <span class="glyphicon glyphicon-comment"></span>
+                                About: {{ current_user.about }}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container w-75 p-3" id="posts">
+    {% for post in all_posts_by_user %}
+    <div id="posts-design" class="posts-design">
+        {% include "network/posts.html" %}
+        {% include "network/comments.html" %}
+        <div class="comment-link" data-postID={{ post.id }}>Comments</div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+{% block script %}
+<script src="{% static 'network/post-comment.js' %}"></script>
+{% endblock %}

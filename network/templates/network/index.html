@@ -1,0 +1,29 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<!-- New Post thingy -->
+{% if user.is_authenticated %}
+<div class="container w-75 p-3" id="create-new-post">
+    <form action=" {% url 'post-comment' action='post' %}" method='post'>
+        {% csrf_token %}
+        {{ create_post_form.as_p }}
+        <input type="submit" value="Post" class="btn btn-primary" />
+    </form>
+</div>
+{% endif %}
+
+<div class="container w-75 p-3" id="posts">
+    {% for post in pag_obj.object_list %}
+    <div id="posts-design" class="posts-design">
+        {% include "network/posts.html" %}
+        <div class="comment-link" data-postID={{ post.id }}>Comments</div>
+    </div>
+    {% endfor %}
+</div>
+{% include "network/paginator.html" %}
+{% endblock %}
+{% block script %}
+<script src="{% static 'network/post-comment.js' %}"></script>
+<script src="{% static 'network/authenticated.js' %}"></script>
+{% endblock %}
