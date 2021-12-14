@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".posts").forEach((postNode) => {
-    editPostManager(postNode);
-    let csrf = getCookie("csrftoken");
-    console.log(csrf);
+  document.querySelectorAll(".posts").forEach((element) => {
+    showModalEditPost(element);
+    deletePost(element);
   });
 });

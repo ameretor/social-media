@@ -1,64 +1,86 @@
-function editPostManager(postNode) {
-  let modalDialog = postNode.querySelector(".modal_edit_post");
+function showModalEditPost(post) {
+  let postId = post.dataset.postid;
+  let editButtn = document.getElementById(`edit_${post.dataset.postid}`);
+  modal = document.getElementById(`myModal`);
+  clseBttn = document.getElementsByClassName("close")[0];
+  let modalBody = modal.querySelector(".modal-body");
+  let saveBtn = document.querySelector(".saveBtn");
 
-  if (modalDialog !== null) {
-    $(modalDialog).on("show.bs.modal", () => {
-      // Get save button and modal body
-      let saveButton = modalDialog.querySelector(
-        ".modal-footer > .btn-primary"
-      );
-      let modalBody = modalDialog.querySelector(".modal-body");
+  // On click edit button
+  editButtn.onclick = function () {
+    modal.style.display = "block";
+    let postContent = document.querySelector(
+      `.post-content[data-postid='${post.dataset.postid}']`
+    );
+    const contentInnerText = postContent.innerText;
+    modalBody.innerHTML = `<textarea class="new-content form-control">${contentInnerText}</textarea>`;
 
-      // Get post id
-      const postID = postNode.id.substr(5);
+    saveBtn.addEventListener("click", () => {
+      const submittedContent = modalBody.querySelector(".new-content").value;
 
-      // Get content of post to be edited
-      let contentNode = postNode.querySelector("div.post-content");
-      const contentInnerText = contentNode.textContent.trim();
+      let csrftoken = getCookie("csrftoken");
 
-      // Populate content with form to fill
-      modalBody.innerHTML = `<textarea class="new-content form-control">${contentInnerText}</textarea>`;
+      // Send PUT request
+      fetch(`post-comment/post`, {
+        method: "PUT",
+        body: JSON.stringify({
+          id: postId,
+          content: submittedContent,
+        }),
+        headers: { "X-CSRFToken": csrftoken },
+      })
+        .then((response) => {
+          // Get response
+          postContent.innerHTML = submittedContent;
+          console.log(`Post content updated at ${postId}`);
+          let response_body = response.json;
 
-      // After save - update
-      saveButton.addEventListener("click", () => {
-        // Get content to submit
-        const submittedContent = modalBody
-          .querySelector("textarea.new-content")
-          .value.trim();
-
-        let csrftoken = getCookie("csrftoken");
-
-        // Hide modal
-        $(modalDialog).modal("hide");
-
-        // Send PUT request
-        fetch("/post-comment/post", {
-          method: "PUT",
-          body: JSON.stringify({
-            id: postID,
-            content: submittedContent,
-          }),
-          headers: { "X-CSRFToken": csrftoken },
+          throw new Error(response_body.error);
         })
-          .then(async (response) => {
-            // if success - update post's content
-            if (response.status === 201) {
-              showMoreButtonControl(postNode);
-              contentNode.innerHTML = submittedContent;
-              console.log(`post id: ${postID} edited successfully`);
-            }
-            // if error - show alert and reload the page
-            else {
-              let response_body = await response.json();
-
-              throw new Error(response_body.error);
-            }
-          })
-          .catch((error) => {
-            alert(error);
-            location.reload();
-          });
-      });
+        .catch((err) => {
+          console.error(err);
+        });
+      window.location.reload();
+      modal.style.display = "none";
     });
-  }
+  };
+
+  clseBttn.onclick = function () {
+    modal.style.display = "none";
+  };
+  window.onclick = function (e) {
+    if (e.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // grab post content and put in text area
+}
+
+function deletePost(post) {
+  let postId = post.dataset.postid;
+  delBtn = document.getElementById(`delete_${post.dataset.postid}`);
+
+  // On click delete button
+  delBtn.onclick = function () {
+    let csrftoken = getCookie("csrftoken");
+    // Send DELETE request
+    fetch(`post-comment/post`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: postId,
+      }),
+      headers: { "X-CSRFToken": csrftoken },
+    })
+      .then((response) => {
+        // Get response
+        console.log(`Post deleted at ${postId}`);
+        let response_body = response.json;
+        throw new Error(response_body.error);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    window.location.reload();
+  };
 }

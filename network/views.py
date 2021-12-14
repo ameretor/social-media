@@ -1,3 +1,4 @@
+import json
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.core.serializers import serialize
@@ -138,7 +139,42 @@ def post_comment_view(request, action):
                 )
                 comment.save()
 
-        return HttpResponseRedirect(reverse("index"))
+    if request.method == "PUT":
+        body = json.loads(request.body)
+
+        try:
+            if action == "post":
+                post = Posts.objects.get(pk=body["id"], user=request.user)
+                post.content = body["content"]
+                post.save()
+                return JsonResponse(
+                    {"message": "Post updated successfully."}, safe=False
+                )
+        except (Posts.DoesNotExist):
+            return JsonResponse(
+                {"errors": "Post does not exist."}, safe=False, status=404
+            )
+
+        return HttpResponse(status=201)
+
+    if request.method == "DELETE":
+        body = json.loads(request.body)
+
+        try:
+            if action == "post":
+                post = Posts.objects.get(pk=body["id"], user=request.user)
+                post.delete()
+                return JsonResponse(
+                    {"message": "Post deleted successfully."}, safe=False
+                )
+        except (Posts.DoesNotExist):
+            return JsonResponse(
+                {"errors": "Post does not exist."}, safe=False, status=404
+            )
+
+        return HttpResponse(status=204)
+
+    return HttpResponseRedirect(reverse("index"))
 
 
 def load_comments(request, post_id):
