@@ -8,6 +8,7 @@ function showModalEditPost(post) {
 
   // On click edit button
   editButtn.onclick = function () {
+    console.log(`Post edited at ${postId}`);
     modal.style.display = "block";
     let postContent = document.querySelector(
       `.post-content[data-postid='${post.dataset.postid}']`
