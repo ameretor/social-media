@@ -269,19 +269,22 @@ def following(request):
 
     if request.method == "POST":
         user_id = request.POST["user-following-id"]
-        print(user_id)
+        user_who_does_the_following = UserProfile.objects.get(user=user)
+        print(f"I do the following {user_who_does_the_following}")
         # Get user followed by current user
         user_followed_by_current_user = User.objects.get(id=user_id)
+        print(f"this is {user_followed_by_current_user}")
         user_profile_obj = UserProfile.objects.get(user=user_id)
         print("This is", user_followed_by_current_user)
 
-        if user in user_profile_obj.followers.all():
-            user_profile_obj.followers.remove(user)
+        if user_followed_by_current_user in user_who_does_the_following.followers.all():
+            user_who_does_the_following.followers.remove(user)
             Following.objects.get(
-                user=user, user_following=user_followed_by_current_user
+                user=user_who_does_the_following,
+                user_following=user_followed_by_current_user,
             ).delete()
         else:
-            user_profile_obj.followers.add(user)
+            user_who_does_the_following.followers.add(user_followed_by_current_user)
 
         following, created = Following.objects.get_or_create(
             user=user, user_following=user_followed_by_current_user, followed=True
